@@ -7,22 +7,20 @@ public class MoneyCollectionLogic : MonoBehaviour
 
     GameManager gameManager;
     Animator animator;
+    public MoneyTextPool moneyTextPool;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        //animator = GetComponentInChildren<Animator>();
-    }
-
-    void Update()
-    {
-
+        moneyTextPool = gameManager.gameObject.GetComponent<MoneyTextPool>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     void OnTriggerEnter(Collider other)
     {
-        //animator.SetTrigger("LeverTrigger");
         int rewardMoney = other.GetComponentInParent<ItemAttributes>().GetRewardMoney();
         gameManager.AddMoney(rewardMoney);
+        moneyTextPool.SpawnMoney(rewardMoney, other.transform.position);
+        animator.SetTrigger("CollectTrigger");
     }
 }

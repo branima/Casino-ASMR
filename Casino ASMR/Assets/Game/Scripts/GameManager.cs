@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+
         if (Input.GetMouseButtonDown(0))
         {
             if (Time.time - lastSpeedBoostClick > speedBoostInterval)
@@ -125,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     public void Income()
     {
-        Debug.Log(activeCollectionRamps + ", " + maxActiveCollectionRamps);
+        //Debug.Log(activeCollectionRamps + ", " + maxActiveCollectionRamps);
         if (activeCollectionRamps < maxActiveCollectionRamps)
             collectionRamps[activeCollectionRamps++].SetActive(true);
     }
