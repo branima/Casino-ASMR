@@ -21,9 +21,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> coinPrefabs;
     Dictionary<string, int> coinNamesDictionary;
 
-    [SerializeField]
     List<PathFollower> activeCoins;
-    [SerializeField]
     List<TrailRenderer> activeCoinsTrails;
     public PathCreator path;
     public float defaultCoinSpeed = 2f;
@@ -32,6 +30,9 @@ public class GameManager : MonoBehaviour
     float lastSpeedBoostClick;
 
     Stack<int> removableCoinIndexes;
+    Queue<GameObject> mergeQueue;
+    public Transform mergePoint;
+    bool merged;
 
     int money;
 
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
         currCoinSpeed = defaultCoinSpeed;
 
         removableCoinIndexes = new Stack<int>();
+        mergeQueue = new Queue<GameObject>();
     }
 
     void Update()
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
 
         bool mergeable = false;
         foreach (KeyValuePair<string, int> kvp in coinDictionary)
-            if (kvp.Value >= 3)
+            if (kvp.Value >= 3 && (coinNamesDictionary[kvp.Key] + 1 < coinNamesDictionary.Count))
                 mergeable = true;
         if (mergeable)
             mergeButton.SetActive(true);
@@ -99,7 +101,7 @@ public class GameManager : MonoBehaviour
         moneyText.text = "$" + money;
     }
 
-    public void AddCoin()
+    public void AddCopper()
     {
         GameObject coinInstance = Instantiate(coinPrefabs[0], Vector3.zero, coinPrefabs[0].transform.rotation, null);
         PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
@@ -111,12 +113,6 @@ public class GameManager : MonoBehaviour
             coinDictionary[coinPrefabs[0].name]++;
         else
             coinDictionary.Add(coinPrefabs[0].name, 1);
-
-        /*
-        foreach (KeyValuePair<string, int> kvp in coinDictionary)
-            Debug.Log(kvp.Key + ", " + kvp.Value);
-        Debug.Log("-----------------------------");
-        */
     }
 
     public void AddRoute()
@@ -133,6 +129,7 @@ public class GameManager : MonoBehaviour
 
     public void MergeCoins()
     {
+        merged = false;
         foreach (KeyValuePair<string, int> kvp in coinDictionary)
         {
             //Debug.Log(kvp.Key + ", " + kvp.Value);
@@ -148,7 +145,8 @@ public class GameManager : MonoBehaviour
                     if (activeCoins[i].name.Contains(kvp.Key))
                     {
                         removableCoinIndexes.Push(i);
-                        Destroy(activeCoins[i].gameObject);
+                        //Destroy(activeCoins[i].gameObject);
+                        mergeQueue.Enqueue(activeCoins[i].gameObject);
                         removeCnt--;
                         if (removeCnt == 0)
                             break;
@@ -162,6 +160,21 @@ public class GameManager : MonoBehaviour
                     activeCoinsTrails.RemoveAt(idx);
                 }
 
+                removeCnt = 3;
+                while (removeCnt > 0)
+                {
+                    GameObject coin = mergeQueue.Dequeue();
+                    coin.GetComponent<PathFollower>().enabled = false;
+                    coin.transform.LookAt(mergePoint);
+                    coin.transform.Rotate(0f, 90f, 0f);
+                    coin.AddComponent<CoinRotation>();
+                    TravelToTarget ttt = coin.AddComponent<TravelToTarget>();
+                    ttt.SetTarget(mergePoint);
+                    mergeQueue.Enqueue(coin);
+                    removeCnt--;
+                }
+
+                /*
                 GameObject coinInstance = Instantiate(coinPrefabs[coinNamesDictionary[kvp.Key] + 1], Vector3.zero, coinPrefabs[coinNamesDictionary[kvp.Key] + 1].transform.rotation, null);
                 PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
                 pathFollowScript.speed = currCoinSpeed;
@@ -176,10 +189,37 @@ public class GameManager : MonoBehaviour
                     else
                         coinDictionary.Add(coinPrefabs[coinNamesDictionary[kvp.Key] + 1].name, 1);
                 }
+                */
                 //break;
                 return;
             }
         }
+    }
+
+    public void MergeComplete()
+    {
+        if (merged)
+            return;
+
+        string name = mergeQueue.Peek().name;
+        name = name.Remove(name.Length - 7);
+        int idx = coinNamesDictionary[name] + 1;
+
+        merged = true;
+        while (mergeQueue.Count > 0)
+            Destroy(mergeQueue.Dequeue());
+
+        GameObject coinInstance = Instantiate(coinPrefabs[idx], Vector3.zero, coinPrefabs[idx].transform.rotation, null);
+        PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
+        pathFollowScript.speed = currCoinSpeed;
+        pathFollowScript.pathCreator = path;
+        activeCoins.Add(pathFollowScript);
+        activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
+
+        if (coinDictionary.ContainsKey(coinPrefabs[idx].name))
+            coinDictionary[coinPrefabs[idx].name]++;
+        else
+            coinDictionary.Add(coinPrefabs[idx].name, 1);
     }
 
     /*
