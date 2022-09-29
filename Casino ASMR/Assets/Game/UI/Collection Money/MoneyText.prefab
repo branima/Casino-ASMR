@@ -14,13 +14,14 @@ GameObject:
   - component: {fileID: 3326254735741892803}
   - component: {fileID: 4879441981142182627}
   - component: {fileID: 2112541014768775472}
+  - component: {fileID: 3809058032285598899}
   m_Layer: 0
   m_Name: MoneyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4183548137273215962
 RectTransform:
   m_ObjectHideFlags: 0
@@ -212,3 +213,17 @@ MonoBehaviour:
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+--- !u!114 &3809058032285598899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4183548137273215974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e87628da88bd64cb444195ed679a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {x: 0, y: 0, z: 0}
+  speed: 0.025

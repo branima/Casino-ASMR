@@ -25,7 +25,8 @@ public class MoneyTextPool : MonoBehaviour
     {
         GameObject moneyInstance = moneyTextInstances.Dequeue();
         moneyInstance.GetComponent<TextMeshPro>().text = "$" + value.ToString();
-        moneyInstance.transform.position = position + Vector3.up * 10f;
+        //moneyInstance.transform.position = position;
+        moneyInstance.GetComponent<FadeInFadeOutProcedural>().SetTarget(position);
         moneyInstance.SetActive(true);
         moneyTextInstances.Enqueue(moneyInstance);
 

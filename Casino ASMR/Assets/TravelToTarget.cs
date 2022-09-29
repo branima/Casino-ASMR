@@ -22,8 +22,11 @@ public class TravelToTarget : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, target.position, lerpTime);
         if (Vector3.Distance(target.position, transform.position) < 0.01f)
         {
+            if (target.name.Contains("Merge"))
+                Invoke("MergeComplete", 1f);
+            else
+                StartMergedCoin();
             target = null;
-            Invoke("MergeComplete", 1f);
         }
     }
 
@@ -36,4 +39,6 @@ public class TravelToTarget : MonoBehaviour
     public Transform GetTarget() => target;
 
     public void MergeComplete() => FindObjectOfType<GameManager>().MergeComplete();
+
+    public void StartMergedCoin() => FindObjectOfType<GameManager>().StartMergedCoin(gameObject);
 }
