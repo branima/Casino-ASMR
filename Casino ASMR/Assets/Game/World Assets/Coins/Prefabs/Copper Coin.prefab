@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 7743676237061124453}
   - component: {fileID: 7743676237061124458}
   - component: {fileID: -1168425761202904413}
+  - component: {fileID: -6618702212367182853}
   m_Layer: 0
   m_Name: Copper Coin
   m_TagString: Untagged
@@ -403,7 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 0}
   endOfPathInstruction: 0
-  speed: 2
+  speed: 0
 --- !u!96 &-1168425761202904413
 TrailRenderer:
   serializedVersion: 2
@@ -511,3 +512,15 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-6618702212367182853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743676237061124452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f78e98129db61c64e92658ef1e96a182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

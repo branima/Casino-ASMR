@@ -18,7 +18,6 @@ namespace PathCreation.Examples
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
                 pathCreator.pathUpdated += OnPathChanged;
-                
             }
         }
 
@@ -26,10 +25,11 @@ namespace PathCreation.Examples
         {
             if (pathCreator != null)
             {
-                distanceTravelled += speed * Time.deltaTime;
+                //distanceTravelled += speed * Time.deltaTime;
+                distanceTravelled = (distanceTravelled + speed * Time.deltaTime) % pathCreator.path.length;
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
-                //Debug.Log(distanceTravelled);
+                //Debug.Log(distanceTravelled / pathCreator.path.length);
             }
         }
 
@@ -39,5 +39,7 @@ namespace PathCreation.Examples
         {
             distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
         }
+
+        public float GetDistanceTraveled() => distanceTravelled;
     }
 }

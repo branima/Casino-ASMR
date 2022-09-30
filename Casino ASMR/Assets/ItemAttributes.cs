@@ -7,15 +7,5 @@ public class ItemAttributes : MonoBehaviour
 
     public int rewardMoney;
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     public int GetRewardMoney() => rewardMoney;
 }

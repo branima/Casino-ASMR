@@ -46,13 +46,17 @@ public class GameManager : MonoBehaviour
     float currCoinSpeed;
     public float speedBoostInterval = 1.5f;
     float lastSpeedBoostClick;
+    float pathLength;
 
     Stack<int> removableCoinIndexes;
     Queue<GameObject> mergeQueue;
     public Transform mergePoint;
     bool merged;
+    public ParticleSystem mergeParticles;
 
     public Transform startPoint;
+
+    float gapBetweenCoins;
 
     int money;
 
@@ -94,6 +98,8 @@ public class GameManager : MonoBehaviour
             coinDictionary[coinPrefabs[0].name]++;
         else
             coinDictionary.Add(coinPrefabs[0].name, 1);
+
+        pathLength = path.path.length;
     }
 
     void Update()
@@ -129,6 +135,14 @@ public class GameManager : MonoBehaviour
             mergeButton.gameObject.SetActive(true);
         else
             mergeButton.gameObject.SetActive(false);
+
+        float incomePerLap = 0f;
+        foreach (PathFollower coin in activeCoins)
+            incomePerLap += coin.GetComponent<ItemAttributes>().GetRewardMoney();
+
+        incomePerLap *= activeCollectionRamps;
+        float incomePerSec = incomePerLap * currCoinSpeed / pathLength;
+        incomePerSecondText.text = incomePerSec.ToString("n1") + "/s";
     }
 
     public void AddMoney(int value)
@@ -167,11 +181,13 @@ public class GameManager : MonoBehaviour
             AddMoney(-oldAddCoinPrice);
 
             GameObject coinInstance = Instantiate(coinPrefabs[0], Vector3.zero, coinPrefabs[0].transform.rotation, null);
+    
             PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
-            pathFollowScript.speed = currCoinSpeed;
+            //pathFollowScript.speed = currCoinSpeed; ///COIN SPACING TO BE FINISHED
             pathFollowScript.pathCreator = path;
             activeCoins.Add(pathFollowScript);
             activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
+            
             if (coinDictionary.ContainsKey(coinPrefabs[0].name))
                 coinDictionary[coinPrefabs[0].name]++;
             else
@@ -272,23 +288,6 @@ public class GameManager : MonoBehaviour
                         removeCnt--;
                     }
 
-                    /*
-                    GameObject coinInstance = Instantiate(coinPrefabs[coinNamesDictionary[kvp.Key] + 1], Vector3.zero, coinPrefabs[coinNamesDictionary[kvp.Key] + 1].transform.rotation, null);
-                    PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
-                    pathFollowScript.speed = currCoinSpeed;
-                    pathFollowScript.pathCreator = path;
-                    activeCoins.Add(pathFollowScript);
-                    activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
-
-                    if (coinNamesDictionary[kvp.Key] + 1 < coinNamesDictionary.Count)
-                    {
-                        if (coinDictionary.ContainsKey(coinPrefabs[coinNamesDictionary[kvp.Key] + 1].name))
-                            coinDictionary[coinPrefabs[coinNamesDictionary[kvp.Key] + 1].name]++;
-                        else
-                            coinDictionary.Add(coinPrefabs[coinNamesDictionary[kvp.Key] + 1].name, 1);
-                    }
-                    */
-                    //break;
                     return;
                 }
             }
@@ -305,11 +304,15 @@ public class GameManager : MonoBehaviour
         int idx = coinNamesDictionary[name] + 1;
 
         merged = true;
+        mergeParticles.Play();
+
         while (mergeQueue.Count > 0)
             Destroy(mergeQueue.Dequeue());
 
         GameObject coinInstance = Instantiate(coinPrefabs[idx], mergePoint.position, coinPrefabs[idx].transform.rotation, null);
         coinInstance.AddComponent<CoinRotation>();
+        StartCoroutine(PutCoinOnTrack(coinInstance, 0.5f));
+        /*
         TravelToTarget ttt = coinInstance.AddComponent<TravelToTarget>();
         ttt.SetTarget(startPoint);
 
@@ -318,19 +321,21 @@ public class GameManager : MonoBehaviour
             addCoinButton.GetComponent<Image>().material = null;
         else
             addCoinButton.GetComponent<Image>().material = uiGrayscaleMat;
-
-        /*
-        PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
-        pathFollowScript.speed = currCoinSpeed;
-        pathFollowScript.pathCreator = path;
-        activeCoins.Add(pathFollowScript);
-        activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
-
-        if (coinDictionary.ContainsKey(coinPrefabs[idx].name))
-            coinDictionary[coinPrefabs[idx].name]++;
-        else
-            coinDictionary.Add(coinPrefabs[idx].name, 1);
         */
+    }
+
+    IEnumerator PutCoinOnTrack(GameObject coinInstance, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        TravelToTarget ttt = coinInstance.AddComponent<TravelToTarget>();
+        ttt.SetTarget(startPoint);
+
+        addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addCoinPrice;
+        if (money >= addCoinPrice && activeCoins.Count < maxNumberOfCoins)
+            addCoinButton.GetComponent<Image>().material = null;
+        else
+            addCoinButton.GetComponent<Image>().material = uiGrayscaleMat;
     }
 
     public void StartMergedCoin(GameObject coinInstance)
