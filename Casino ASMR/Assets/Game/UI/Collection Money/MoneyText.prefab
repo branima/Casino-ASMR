@@ -226,4 +226,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0, z: 0}
-  speed: 0.025
+  speed: 0.01

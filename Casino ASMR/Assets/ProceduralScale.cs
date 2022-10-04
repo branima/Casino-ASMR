@@ -28,7 +28,7 @@ public class ProceduralScale : MonoBehaviour
         lerpTime += speed * localModif * Time.deltaTime;
         //Debug.Log(transform.name + ": " + transform.localScale + ", " + target + ", " + lerpTime);
         transform.localScale = Vector3.Lerp(transform.localScale, target, lerpTime);
-        if (Vector3.Distance(transform.localScale, target) < 0.01f)
+        if (Vector3.Distance(transform.localScale, target) < 0.001f)
         {
             transform.localScale = target;
             scale = false;

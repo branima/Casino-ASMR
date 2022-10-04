@@ -7,7 +7,7 @@ public class FadeInFadeOutProcedural : MonoBehaviour
     [SerializeField]
     Vector3 target;
 
-    public float speed = 0.1f;
+    public float speed = 0.05f;
     float lerpTime;
 
     void Awake() => target = Vector3.zero;
@@ -26,7 +26,7 @@ public class FadeInFadeOutProcedural : MonoBehaviour
     public void SetTarget(Vector3 target)
     {
         lerpTime = 0f;
-        transform.position = target - Vector3.up * 0.5f;
-        this.target = target + Vector3.up * 0.5f;
+        transform.position = target;
+        this.target = target + Vector3.up;
     }
 }

@@ -20,7 +20,8 @@ public class MoneyCollectionLogic : MonoBehaviour
     {
         int rewardMoney = other.GetComponentInParent<ItemAttributes>().GetRewardMoney();
         gameManager.AddMoney(rewardMoney);
-        moneyTextPool.SpawnMoney(rewardMoney, other.transform.position);
+        //moneyTextPool.SpawnMoney(rewardMoney, other.transform.position);
+        moneyTextPool.SpawnMoney(rewardMoney, transform.position);
         animator.SetTrigger("CollectTrigger");
     }
 }

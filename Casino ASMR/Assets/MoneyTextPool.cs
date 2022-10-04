@@ -16,7 +16,7 @@ public class MoneyTextPool : MonoBehaviour
         moneyTextInstances = new Queue<GameObject>();
         for (int i = 0; i < numberOfInstances; i++)
         {
-            GameObject moneyInstance = Instantiate(moneyTextPrefab, Vector3.zero, moneyTextPrefab.transform.rotation);
+            GameObject moneyInstance = Instantiate(moneyTextPrefab, new Vector3(300, 0, 0), moneyTextPrefab.transform.rotation);
             moneyTextInstances.Enqueue(moneyInstance);
         }
     }

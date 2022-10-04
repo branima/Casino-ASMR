@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public int mergePrice = 10;
 
     int addCoinModif = 5;
-    int addRouteModif = 300;
+    int addRouteModif = 10;
     int incomeModif = 30;
     int mergeModif = 30;
 
@@ -59,7 +59,11 @@ public class GameManager : MonoBehaviour
     public float gapBetweenCoins = 1f;
 
     public Transform track;
-    int lastActiveTrackUpgradeIdx;
+
+    public List<Transform> upgrade;
+    public List<Transform> downgrade;
+
+    Vector3 rampScale;
 
     int money;
 
@@ -70,7 +74,7 @@ public class GameManager : MonoBehaviour
 
         activeCollectionRamps = 1;
         collectionRamps[0].SetActive(true);
-        maxActiveCollectionRamps = 3;
+        maxActiveCollectionRamps = 2;
 
         coinDictionary = new Dictionary<string, int>();
         coinNamesDictionary = new Dictionary<string, int>();
@@ -94,17 +98,17 @@ public class GameManager : MonoBehaviour
         GameObject coinInstance = Instantiate(coinPrefabs[0], startPoint.position, coinPrefabs[0].transform.rotation, null);
         PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
         pathFollowScript.speed = currCoinSpeed;
-        pathFollowScript.pathCreator = paths[lastActiveTrackUpgradeIdx];
+        pathFollowScript.pathCreator = paths[0];
         activeCoins.Add(pathFollowScript);
-        activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
+        activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
         if (coinDictionary.ContainsKey(coinPrefabs[0].name))
             coinDictionary[coinPrefabs[0].name]++;
         else
             coinDictionary.Add(coinPrefabs[0].name, 1);
 
-        pathLength = paths[lastActiveTrackUpgradeIdx].path.length;
+        pathLength = paths[0].path.length;
 
-        lastActiveTrackUpgradeIdx = 0;
+        rampScale = collectionRamps[0].transform.localScale;
     }
 
     void Update()
@@ -188,8 +192,8 @@ public class GameManager : MonoBehaviour
             GameObject coinInstance = Instantiate(coinPrefabs[0], startPoint.position, coinPrefabs[0].transform.rotation, null);
 
             PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
-            pathFollowScript.pathCreator = paths[lastActiveTrackUpgradeIdx];
-            activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
+            pathFollowScript.pathCreator = paths[0];
+            activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
 
             CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
             coinSpacing.SetActiveCoins(activeCoins);
@@ -214,30 +218,42 @@ public class GameManager : MonoBehaviour
             addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addRoutePrice;
             AddMoney(-oldAddRoutePrice);
 
-            if (lastActiveTrackUpgradeIdx + 1 <= track.childCount)
+            if (upgrade.Count > 0)
             {
-                ProceduralScale procScale = track.GetChild(lastActiveTrackUpgradeIdx).GetComponent<ProceduralScale>();
+                ProceduralScale procScale = downgrade[0].GetComponent<ProceduralScale>();
                 procScale.Scale(Vector3.zero);
+                downgrade.RemoveAt(0);
 
-                lastActiveTrackUpgradeIdx++;
-                Transform child = track.GetChild(lastActiveTrackUpgradeIdx);
+                Transform child = upgrade[0];
                 Vector3 oldScale = child.localScale;
                 child.localScale = Vector3.zero;
                 child.gameObject.SetActive(true);
                 child.GetComponent<ProceduralScale>().Scale(oldScale);
+                upgrade.RemoveAt(0);
 
+                paths.RemoveAt(0);
                 foreach (PathFollower coin in activeCoins)
                 {
-                    coin.pathCreator = paths[lastActiveTrackUpgradeIdx];
+                    coin.pathCreator = paths[0];
+                }
+
+                if (child.childCount > 1)
+                {
+                    maxActiveCollectionRamps += child.childCount - 1;
+                    for (int i = 1; i < child.childCount; i++)
+                    {
+                        Transform ramp = child.GetChild(i);
+                        collectionRamps.Add(ramp.gameObject);
+                        //ramp.parent = null;
+                        //ramp.localScale = rampScale;
+                    }
+                    incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
+                    if (money >= incomePrice && activeCollectionRamps < maxActiveCollectionRamps)
+                        incomeButton.GetComponent<Image>().material = null;
+                    else
+                        incomeButton.GetComponent<Image>().material = uiGrayscaleMat;
                 }
             }
-
-            maxActiveCollectionRamps += 3;
-            incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
-            if (money >= incomePrice && activeCollectionRamps < maxActiveCollectionRamps)
-                incomeButton.GetComponent<Image>().material = null;
-            else
-                incomeButton.GetComponent<Image>().material = uiGrayscaleMat;
         }
     }
 
@@ -359,8 +375,8 @@ public class GameManager : MonoBehaviour
         int idx = coinNamesDictionary[name];
 
         PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
-        pathFollowScript.pathCreator = paths[lastActiveTrackUpgradeIdx];
-        activeCoinsTrails.Add(coinInstance.GetComponent<TrailRenderer>());
+        pathFollowScript.pathCreator = paths[0];
+        activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
 
         CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
         coinSpacing.SetActiveCoins(activeCoins);
