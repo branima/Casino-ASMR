@@ -7,7 +7,7 @@ public class TravelToTarget : MonoBehaviour
     [SerializeField]
     Transform target;
 
-    public float speed = 0.1f;
+    public float speed = 0.2f;
     float lerpTime;
 
     void Awake() => target = null;

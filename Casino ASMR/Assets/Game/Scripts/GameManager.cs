@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     Queue<GameObject> mergeQueue;
     public Transform mergePoint;
     bool merged;
+    bool isMerging;
     public ParticleSystem mergeParticles;
 
     public Transform startPoint;
@@ -64,6 +65,8 @@ public class GameManager : MonoBehaviour
     public List<Transform> downgrade;
 
     Vector3 rampScale;
+
+    public CameraRotation camRotationScript;
 
     int money;
 
@@ -109,10 +112,15 @@ public class GameManager : MonoBehaviour
         pathLength = paths[0].path.length;
 
         rampScale = collectionRamps[0].transform.localScale;
+
+        isMerging = false;
     }
 
     void Update()
     {
+        if (isMerging)
+            return;
+
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             if (Time.time - lastSpeedBoostClick > speedBoostInterval)
@@ -278,6 +286,9 @@ public class GameManager : MonoBehaviour
         merged = false;
         if (money >= mergePrice)
         {
+            isMerging = true;
+            camRotationScript.enabled = false;
+
             int oldMergePrice = mergePrice;
             mergePrice += mergeModif;
             mergeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + mergePrice;
@@ -387,6 +398,9 @@ public class GameManager : MonoBehaviour
             coinDictionary[coinPrefabs[idx].name]++;
         else
             coinDictionary.Add(coinPrefabs[idx].name, 1);
+
+        isMerging = false;
+        camRotationScript.enabled = true;
     }
     /*
     foreach (KeyValuePair<string, int> kvp in coinDictionary)
