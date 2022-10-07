@@ -24,10 +24,10 @@ public class MoneyTextPool : MonoBehaviour
     public void SpawnMoney(int value, Vector3 position)
     {
         GameObject moneyInstance = moneyTextInstances.Dequeue();
-        moneyInstance.GetComponent<TextMeshPro>().text = "$" + value.ToString();
+        moneyInstance.GetComponentInChildren<TextMeshPro>().text = "$" + value.ToString();
         //moneyInstance.transform.position = position;
-        moneyInstance.GetComponent<FadeInFadeOutProcedural>().SetTarget(position);
         moneyInstance.SetActive(true);
+        moneyInstance.GetComponent<FadeInFadeOutProcedural>().SetTarget(position);
         moneyTextInstances.Enqueue(moneyInstance);
 
     }

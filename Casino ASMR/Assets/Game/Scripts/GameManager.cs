@@ -165,14 +165,20 @@ public class GameManager : MonoBehaviour
     public void AddMoney(int value)
     {
         money += value;
-        moneyText.text = "$" + money;
+
+        if (money < 1000)
+            moneyText.text = "$" + money.ToString();
+        else if (money < 1000000)
+            moneyText.text = "$" + (money * 1f / 1000).ToString("n2") + "K";
+        else
+            moneyText.text = "$" + (money * 1f / 1000000).ToString("n2") + "M";
 
         if (money >= addCoinPrice && activeCoins.Count < maxNumberOfCoins)
             addCoinButton.GetComponent<Image>().material = null;
         else
             addCoinButton.GetComponent<Image>().material = uiGrayscaleMat;
 
-        if (money >= addRoutePrice)
+        if (money >= addRoutePrice && paths.Count > 1)
             addRouteButton.GetComponent<Image>().material = null;
         else
             addRouteButton.GetComponent<Image>().material = uiGrayscaleMat;
@@ -219,7 +225,7 @@ public class GameManager : MonoBehaviour
 
     public void AddRoute()
     {
-        if (money >= addRoutePrice)
+        if (money >= addRoutePrice && paths.Count > 1)
         {
             int oldAddRoutePrice = addRoutePrice;
             addRoutePrice += addRouteModif;
@@ -247,11 +253,14 @@ public class GameManager : MonoBehaviour
 
                 if (child.childCount > 1)
                 {
-                    maxActiveCollectionRamps += child.childCount - 1;
                     for (int i = 1; i < child.childCount; i++)
                     {
                         Transform ramp = child.GetChild(i);
-                        collectionRamps.Add(ramp.gameObject);
+                        if (ramp.GetComponent<MoneyCollectionLogic>() != null)
+                        {
+                            collectionRamps.Add(ramp.gameObject);
+                            maxActiveCollectionRamps++;
+                        }
                         //ramp.parent = null;
                         //ramp.localScale = rampScale;
                     }
@@ -260,6 +269,12 @@ public class GameManager : MonoBehaviour
                         incomeButton.GetComponent<Image>().material = null;
                     else
                         incomeButton.GetComponent<Image>().material = uiGrayscaleMat;
+                }
+
+                if (paths.Count == 1)
+                {
+                    addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "MAX";
+                    addRouteButton.GetComponent<Image>().material = uiGrayscaleMat;
                 }
             }
         }

@@ -4,11 +4,5 @@ using UnityEngine;
 
 public class MoneyTextLogic : MonoBehaviour
 {
-
-    public void TurnOff() => gameObject.SetActive(false);
-
-    void Update()
-    {
-        transform.LookAt(-Camera.main.transform.position);
-    }
+    void Update() => transform.LookAt(Camera.main.transform.position);
 }
