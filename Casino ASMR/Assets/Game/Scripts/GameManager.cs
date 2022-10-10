@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> collectionRamps;
     int activeCollectionRamps;
+    [SerializeField]
     int maxActiveCollectionRamps;
 
     Dictionary<string, int> coinDictionary;
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         activeCollectionRamps = 1;
         collectionRamps[0].SetActive(true);
-        maxActiveCollectionRamps = 2;
+        maxActiveCollectionRamps = collectionRamps.Count;
 
         coinDictionary = new Dictionary<string, int>();
         coinNamesDictionary = new Dictionary<string, int>();
