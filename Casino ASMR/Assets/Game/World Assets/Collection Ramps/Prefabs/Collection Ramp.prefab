@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1663949688132081874}
   - component: {fileID: 1663949688132081873}
   - component: {fileID: 1663949688132081872}
+  - component: {fileID: 6467632381202811817}
   m_Layer: 0
   m_Name: Collection Ramp
   m_TagString: Untagged
@@ -110,6 +111,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyTextPool: {fileID: 0}
+--- !u!114 &6467632381202811817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663949688132081711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef47dccf0e030e14081986963bde9c45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.85
 --- !u!1 &2783383284873272272
 GameObject:
   m_ObjectHideFlags: 0

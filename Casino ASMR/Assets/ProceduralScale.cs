@@ -5,7 +5,6 @@ using UnityEngine;
 public class ProceduralScale : MonoBehaviour
 {
 
-
     Vector3 target;
 
     float lerpTime;
