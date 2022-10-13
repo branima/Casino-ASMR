@@ -291,7 +291,13 @@ public class GameManager : MonoBehaviour
                 incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
             AddMoney(-oldIncomePrice);
 
-            collectionRamps[activeCollectionRamps++].SetActive(true);
+            GameObject ramp = collectionRamps[activeCollectionRamps++];
+            Vector3 oldScale = ramp.transform.localScale;
+            ramp.transform.localScale = Vector3.zero;
+            ramp.SetActive(true);
+            ramp.GetComponent<ProceduralScale>().Scale(oldScale);
+            StartCoroutine(Deparent(ramp.transform, 2f));
+
             if (activeCollectionRamps == maxActiveCollectionRamps)
                 incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "MAX";
         }
@@ -379,6 +385,13 @@ public class GameManager : MonoBehaviour
         GameObject coinInstance = Instantiate(coinPrefabs[idx], mergePoint.position, coinPrefabs[idx].transform.rotation, null);
         coinInstance.AddComponent<CoinRotation>();
         StartCoroutine(PutCoinOnTrack(coinInstance, 0.5f));
+    }
+
+    IEnumerator Deparent(Transform objectToDeparent, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        objectToDeparent.parent = null;
     }
 
     IEnumerator PutCoinOnTrack(GameObject coinInstance, float waitTime)
