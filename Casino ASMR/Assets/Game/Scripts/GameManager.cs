@@ -514,7 +514,11 @@ public class GameManager : MonoBehaviour
         camRotationScript.enabled = true;
     }
 
-    public void NextLevel() => LoadLevel((SceneManager.GetActiveScene().buildIndex + 1) % SceneManager.sceneCountInBuildSettings);
+    public void NextLevel()
+    {
+        if (money > nextAreaPrice)
+            LoadLevel((SceneManager.GetActiveScene().buildIndex + 1) % SceneManager.sceneCountInBuildSettings);
+    }
     void LoadLevel(int levelIndex) => SceneManager.LoadScene(Mathf.Max(0, levelIndex));
 }
 
