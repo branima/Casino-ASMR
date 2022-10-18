@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class CameraSwitchTrigger : MonoBehaviour
 {
-    void Start() => CameraSwitch.Instance.ChangeCamera();
+    void Awake() => CameraSwitch.Instance.ChangeCamera();
 }

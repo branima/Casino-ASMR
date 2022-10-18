@@ -6,6 +6,12 @@ public class CoinRoll : MonoBehaviour
 {
 
     public float speed;
+    float currSpeed;
 
-    void Update() => transform.Rotate(0, 0, -90f * Time.deltaTime * speed);
+    void Awake() => currSpeed = speed;
+
+    void Update() => transform.Rotate(0, 0, -90f * Time.deltaTime * currSpeed);
+
+    public void SetNormalSpeed() => currSpeed = speed;
+    public void SetBoostedSpeed() => currSpeed = speed * 2f;
 }

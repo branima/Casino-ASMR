@@ -6,6 +6,7 @@ using PathCreation.Examples;
 using PathCreation;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,15 +18,17 @@ public class GameManager : MonoBehaviour
     public Button addRouteButton;
     public Button incomeButton;
     public Button mergeButton;
+    public Button nextAreaButton;
     public Material uiGrayscaleMat;
 
     public int addCoinPrice = 0;
     public int addRoutePrice = 300;
     public int incomePrice = 0;
     public int mergePrice = 10;
+    public int nextAreaPrice = 1000;
 
     int addCoinModif = 5;
-    int addRouteModif = 10;
+    int addRouteModif = 150;
     int incomeModif = 30;
     int mergeModif = 30;
 
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
     List<PathFollower> activeCoins;
     public int maxNumberOfCoins = 12;
     List<TrailRenderer> activeCoinsTrails;
+    List<CoinRoll> activeCoinRollScripts;
 
     public List<PathCreator> paths;
     public float defaultCoinSpeed = 2f;
@@ -69,6 +73,7 @@ public class GameManager : MonoBehaviour
 
     public CameraRotation camRotationScript;
 
+    [SerializeField]
     int money;
 
     void Start()
@@ -87,6 +92,7 @@ public class GameManager : MonoBehaviour
 
         activeCoins = new List<PathFollower>();
         activeCoinsTrails = new List<TrailRenderer>();
+        activeCoinRollScripts = new List<CoinRoll>();
         lastSpeedBoostClick = -100f;
         currCoinSpeed = defaultCoinSpeed;
 
@@ -98,6 +104,13 @@ public class GameManager : MonoBehaviour
         incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
         mergeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + mergePrice;
 
+        if (nextAreaPrice < 1000)
+            nextAreaButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + nextAreaPrice;
+        else if (nextAreaPrice < 1000000)
+            nextAreaButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (nextAreaPrice * 1f / 1000).ToString("n1") + "K";
+        else
+            nextAreaButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (nextAreaPrice * 1f / 1000000).ToString("n1") + "M";
+
         ///FIRST COIN
         GameObject coinInstance = Instantiate(coinPrefabs[0], startPoint.position, coinPrefabs[0].transform.rotation, null);
         PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
@@ -105,6 +118,8 @@ public class GameManager : MonoBehaviour
         pathFollowScript.pathCreator = paths[0];
         activeCoins.Add(pathFollowScript);
         activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
+        activeCoinRollScripts.Add(coinInstance.GetComponentInChildren<CoinRoll>());
+
         if (coinDictionary.ContainsKey(coinPrefabs[0].name))
             coinDictionary[coinPrefabs[0].name]++;
         else
@@ -131,6 +146,8 @@ public class GameManager : MonoBehaviour
                     coin.speed = currCoinSpeed;
                 foreach (TrailRenderer trail in activeCoinsTrails)
                     trail.enabled = true;
+                foreach (CoinRoll cr in activeCoinRollScripts)
+                    cr.SetBoostedSpeed();
             }
 
             lastSpeedBoostClick = Time.time;
@@ -143,6 +160,8 @@ public class GameManager : MonoBehaviour
                 coin.speed = currCoinSpeed;
             foreach (TrailRenderer trail in activeCoinsTrails)
                 trail.enabled = false;
+            foreach (CoinRoll cr in activeCoinRollScripts)
+                cr.SetNormalSpeed();
         }
 
         bool mergeable = false;
@@ -193,6 +212,11 @@ public class GameManager : MonoBehaviour
             mergeButton.GetComponent<Image>().material = null;
         else
             mergeButton.GetComponent<Image>().material = uiGrayscaleMat;
+
+        if (money >= nextAreaPrice)
+            nextAreaButton.GetComponent<Image>().material = null;
+        else
+            nextAreaButton.GetComponent<Image>().material = uiGrayscaleMat;
     }
 
     public void AddCopper()
@@ -201,14 +225,28 @@ public class GameManager : MonoBehaviour
         {
             int oldAddCoinPrice = addCoinPrice;
             addCoinPrice += addCoinModif;
-            addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addCoinPrice;
+            if (addCoinPrice < 1000)
+                addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addCoinPrice;
+            else if (addCoinPrice < 1000000)
+                addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addCoinPrice * 1f / 1000).ToString("n2") + "K";
+            else
+                addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addCoinPrice * 1f / 1000000).ToString("n2") + "M";
+
             AddMoney(-oldAddCoinPrice);
 
             GameObject coinInstance = Instantiate(coinPrefabs[0], startPoint.position, coinPrefabs[0].transform.rotation, null);
 
             PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
             pathFollowScript.pathCreator = paths[0];
-            activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
+            TrailRenderer tr = coinInstance.GetComponentInChildren<TrailRenderer>();
+            if (currCoinSpeed == defaultCoinSpeed * 2)
+                tr.enabled = true;
+            activeCoinsTrails.Add(tr);
+
+            CoinRoll cr = coinInstance.GetComponentInChildren<CoinRoll>();
+            if (currCoinSpeed == defaultCoinSpeed * 2)
+                cr.SetBoostedSpeed();
+            activeCoinRollScripts.Add(cr);
 
             CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
             coinSpacing.SetActiveCoins(activeCoins);
@@ -230,7 +268,13 @@ public class GameManager : MonoBehaviour
         {
             int oldAddRoutePrice = addRoutePrice;
             addRoutePrice += addRouteModif;
-            addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addRoutePrice;
+            if (addRoutePrice < 1000)
+                addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addRoutePrice;
+            else if (addRoutePrice < 1000000)
+                addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addRoutePrice * 1f / 1000).ToString("n2") + "K";
+            else
+                addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addRoutePrice * 1f / 1000000).ToString("n2") + "M";
+
             AddMoney(-oldAddRoutePrice);
 
             if (upgrade.Count > 0)
@@ -247,6 +291,7 @@ public class GameManager : MonoBehaviour
                 upgrade.RemoveAt(0);
 
                 paths.RemoveAt(0);
+                pathLength = paths[0].path.length;
                 foreach (PathFollower coin in activeCoins)
                 {
                     coin.pathCreator = paths[0];
@@ -265,7 +310,14 @@ public class GameManager : MonoBehaviour
                         //ramp.parent = null;
                         //ramp.localScale = rampScale;
                     }
-                    incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
+
+                    if (incomePrice < 1000)
+                        incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
+                    else if (incomePrice < 1000000)
+                        incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (incomePrice * 1f / 1000).ToString("n2") + "K";
+                    else
+                        incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (incomePrice * 1f / 1000000).ToString("n2") + "M";
+
                     if (money >= incomePrice && activeCollectionRamps < maxActiveCollectionRamps)
                         incomeButton.GetComponent<Image>().material = null;
                     else
@@ -279,6 +331,9 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        if (upgrade.Count == 0)
+            nextAreaButton.gameObject.SetActive(true);
     }
 
     public void Income()
@@ -288,7 +343,14 @@ public class GameManager : MonoBehaviour
             int oldIncomePrice = incomePrice;
             incomePrice += incomeModif;
             if (activeCollectionRamps < maxActiveCollectionRamps)
-                incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
+            {
+                if (incomePrice < 1000)
+                    incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + incomePrice;
+                else if (incomePrice < 1000000)
+                    incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (incomePrice * 1f / 1000).ToString("n2") + "K";
+                else
+                    incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (incomePrice * 1f / 1000000).ToString("n2") + "M";
+            }
             AddMoney(-oldIncomePrice);
 
             GameObject ramp = collectionRamps[activeCollectionRamps++];
@@ -313,7 +375,13 @@ public class GameManager : MonoBehaviour
 
             int oldMergePrice = mergePrice;
             mergePrice += mergeModif;
-            mergeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + mergePrice;
+            if (mergePrice < 1000)
+                mergeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + mergePrice;
+            else if (mergePrice < 1000000)
+                mergeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (mergePrice * 1f / 1000).ToString("n2") + "K";
+            else
+                mergeButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (mergePrice * 1f / 1000000).ToString("n2") + "M";
+
             AddMoney(-oldMergePrice);
 
             foreach (KeyValuePair<string, int> kvp in coinDictionary)
@@ -401,7 +469,13 @@ public class GameManager : MonoBehaviour
         TravelToTarget ttt = coinInstance.AddComponent<TravelToTarget>();
         ttt.SetTarget(startPoint);
 
-        addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addCoinPrice;
+        if (addCoinPrice < 1000)
+            addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addCoinPrice;
+        else if (addCoinPrice < 1000000)
+            addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addCoinPrice * 1f / 1000).ToString("n2") + "K";
+        else
+            addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addCoinPrice * 1f / 1000000).ToString("n2") + "M";
+
         if (money >= addCoinPrice && activeCoins.Count < maxNumberOfCoins)
             addCoinButton.GetComponent<Image>().material = null;
         else
@@ -416,7 +490,15 @@ public class GameManager : MonoBehaviour
 
         PathFollower pathFollowScript = coinInstance.GetComponent<PathFollower>();
         pathFollowScript.pathCreator = paths[0];
-        activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
+        TrailRenderer tr = coinInstance.GetComponentInChildren<TrailRenderer>();
+        if (currCoinSpeed == defaultCoinSpeed * 2)
+            tr.enabled = true;
+        activeCoinsTrails.Add(tr);
+
+        CoinRoll cr = coinInstance.GetComponentInChildren<CoinRoll>();
+        if (currCoinSpeed == defaultCoinSpeed * 2)
+            cr.SetBoostedSpeed();
+        activeCoinRollScripts.Add(cr);
 
         CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
         coinSpacing.SetActiveCoins(activeCoins);
@@ -431,10 +513,8 @@ public class GameManager : MonoBehaviour
         isMerging = false;
         camRotationScript.enabled = true;
     }
-    /*
-    foreach (KeyValuePair<string, int> kvp in coinDictionary)
-        Debug.Log(kvp.Key + ", " + kvp.Value);
-    Debug.Log("-----------------------------");
-    */
+
+    public void NextLevel() => LoadLevel((SceneManager.GetActiveScene().buildIndex + 1) % SceneManager.sceneCountInBuildSettings);
+    void LoadLevel(int levelIndex) => SceneManager.LoadScene(Mathf.Max(0, levelIndex));
 }
 
