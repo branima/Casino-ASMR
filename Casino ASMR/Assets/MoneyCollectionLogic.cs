@@ -8,12 +8,14 @@ public class MoneyCollectionLogic : MonoBehaviour
     GameManager gameManager;
     Animator animator;
     public MoneyTextPool moneyTextPool;
+    ParticleSystem moneyConfettiParticles;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         moneyTextPool = gameManager.gameObject.GetComponent<MoneyTextPool>();
         animator = GetComponentInChildren<Animator>();
+        moneyConfettiParticles = transform.GetChild(1).GetComponent<ParticleSystem>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -23,5 +25,6 @@ public class MoneyCollectionLogic : MonoBehaviour
         //moneyTextPool.SpawnMoney(rewardMoney, other.transform.position);
         moneyTextPool.SpawnMoney(rewardMoney, transform.position + Vector3.up * 0.5f);
         animator.SetTrigger("CollectTrigger");
+        moneyConfettiParticles.Play();
     }
 }

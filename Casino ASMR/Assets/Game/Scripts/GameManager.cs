@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> collectionRamps;
     int activeCollectionRamps;
-    [SerializeField]
     int maxActiveCollectionRamps;
 
     Dictionary<string, int> coinDictionary;
@@ -42,6 +41,7 @@ public class GameManager : MonoBehaviour
     Dictionary<string, int> coinNamesDictionary;
 
     List<PathFollower> activeCoins;
+    int currNumberOfCoins;
     public int maxNumberOfCoins = 12;
     List<TrailRenderer> activeCoinsTrails;
     List<CoinRoll> activeCoinRollScripts;
@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviour
         activeCoins.Add(pathFollowScript);
         activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
         activeCoinRollScripts.Add(coinInstance.GetComponentInChildren<CoinRoll>());
+        currNumberOfCoins = 1;
 
         if (coinDictionary.ContainsKey(coinPrefabs[0].name))
             coinDictionary[coinPrefabs[0].name]++;
@@ -193,7 +194,7 @@ public class GameManager : MonoBehaviour
         else
             moneyText.text = "$" + (money * 1f / 1000000).ToString("n2") + "M";
 
-        if (money >= addCoinPrice && activeCoins.Count < maxNumberOfCoins)
+        if (money >= addCoinPrice && currNumberOfCoins < maxNumberOfCoins)
             addCoinButton.GetComponent<Image>().material = null;
         else
             addCoinButton.GetComponent<Image>().material = uiGrayscaleMat;
@@ -221,8 +222,9 @@ public class GameManager : MonoBehaviour
 
     public void AddCopper()
     {
-        if (money >= addCoinPrice && activeCoins.Count < maxNumberOfCoins)
+        if (money >= addCoinPrice && currNumberOfCoins < maxNumberOfCoins)
         {
+            currNumberOfCoins++;
             int oldAddCoinPrice = addCoinPrice;
             addCoinPrice += addCoinModif;
             if (addCoinPrice < 1000)
@@ -257,7 +259,7 @@ public class GameManager : MonoBehaviour
             else
                 coinDictionary.Add(coinPrefabs[0].name, 1);
 
-            if (activeCoins.Count == maxNumberOfCoins)
+            if (currNumberOfCoins == maxNumberOfCoins)
                 addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "MAX";
         }
     }
@@ -274,6 +276,14 @@ public class GameManager : MonoBehaviour
                 addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addRoutePrice * 1f / 1000).ToString("n2") + "K";
             else
                 addRouteButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addRoutePrice * 1f / 1000000).ToString("n2") + "M";
+
+            maxNumberOfCoins += 3;
+            if (addCoinPrice < 1000)
+                addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + addCoinPrice;
+            else if (addCoinPrice < 1000000)
+                addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addCoinPrice * 1f / 1000).ToString("n2") + "K";
+            else
+                addCoinButton.GetComponentInChildren<TextMeshProUGUI>().text = "$" + (addCoinPrice * 1f / 1000000).ToString("n2") + "M";
 
             AddMoney(-oldAddRoutePrice);
 
@@ -499,6 +509,8 @@ public class GameManager : MonoBehaviour
         if (currCoinSpeed == defaultCoinSpeed * 2)
             cr.SetBoostedSpeed();
         activeCoinRollScripts.Add(cr);
+
+        currNumberOfCoins -= 2;
 
         CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
         coinSpacing.SetActiveCoins(activeCoins);

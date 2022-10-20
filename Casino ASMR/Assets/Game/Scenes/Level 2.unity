@@ -949,7 +949,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 228522362}
   m_LocalRotation: {x: 0.1319522, y: 0.8272222, z: -0.20884788, w: 0.5046529}
-  m_LocalPosition: {x: -7.67, y: 5.65, z: 4.01}
+  m_LocalPosition: {x: -8.92, y: 6.42, z: 4.66}
   m_LocalScale: {x: 0.6, y: 0.11479801, z: 0.6}
   m_Children: []
   m_Father: {fileID: 208782006}
@@ -8098,7 +8098,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933830362}
   m_LocalRotation: {x: 0.1319522, y: 0.8272222, z: -0.20884788, w: 0.5046529}
-  m_LocalPosition: {x: -6.29, y: 4.8, z: 3.29}
+  m_LocalPosition: {x: -7.63, y: 5.62, z: 3.98}
   m_LocalScale: {x: 0.6, y: 0.11479801, z: 0.6}
   m_Children: []
   m_Father: {fileID: 208782006}
@@ -8480,12 +8480,10 @@ MonoBehaviour:
   - {fileID: 330074995}
   - {fileID: 494087247}
   - {fileID: 797146237}
-  maxActiveCollectionRamps: 0
   coinPrefabs:
-  - {fileID: 7743676237061124452, guid: 807bb9d50a945fc47943534f90025993, type: 3}
-  - {fileID: 7743676237061124452, guid: bd72122b8fa53dc47ac83b01e49a0399, type: 3}
-  - {fileID: 7743676237061124452, guid: 6dea72a0ccd41ac4cb8ebf345ca6e378, type: 3}
   - {fileID: 7743676237061124452, guid: bc3cb4e7b69cd3d46b24a14a51778ab3, type: 3}
+  - {fileID: 7743676237061124452, guid: af6c80b104e14894e939f51107163342, type: 3}
+  - {fileID: 7743676237061124452, guid: b1c3ccfe8fc423441bab1c7fb4aa602c, type: 3}
   maxNumberOfCoins: 12
   paths:
   - {fileID: 473449516}
@@ -10003,7 +10001,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
   m_LocalRotation: {x: 0.1319522, y: 0.8272222, z: -0.20884788, w: 0.5046529}
-  m_LocalPosition: {x: -6.29, y: 4.8, z: 3.29}
+  m_LocalPosition: {x: -7.63, y: 5.62, z: 3.98}
   m_LocalScale: {x: 0.6, y: 0.11479801, z: 0.6}
   m_Children:
   - {fileID: 1712056032}
@@ -11129,7 +11127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020288528}
   m_LocalRotation: {x: 0.1319522, y: 0.8272222, z: -0.20884788, w: 0.5046529}
-  m_LocalPosition: {x: -7.14, y: 5.32, z: 3.73}
+  m_LocalPosition: {x: -8.43, y: 6.11, z: 4.4}
   m_LocalScale: {x: 0.6, y: 0.11479801, z: 0.6}
   m_Children: []
   m_Father: {fileID: 208782006}
@@ -16384,7 +16382,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 2.8180974e+20}
+  m_BoundingSphereOverride: {x: 6e-45, y: 0, z: 0, w: 1.424e-42}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0

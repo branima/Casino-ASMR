@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Diagnostics;
 
 public class CameraSwitch : MonoBehaviour
 {
@@ -31,6 +30,7 @@ public class CameraSwitch : MonoBehaviour
         if (reposition)
         {
             //UnityEngine.Debug.Log("Zdravo " + (cam.position != currActiveTransform.position));
+            //UnityEngine.Debug.Log(repoTime);
             repoTime += Time.deltaTime * 0.1f;
             if (cam.position != currActiveTransform.position)
                 cam.position = Vector3.Lerp(cam.position, currActiveTransform.position, repoTime);
@@ -38,7 +38,10 @@ public class CameraSwitch : MonoBehaviour
             if (cam.rotation != currActiveTransform.rotation)
                 cam.rotation = Quaternion.Lerp(cam.rotation, currActiveTransform.rotation, repoTime);
 
-            if (cam.position == currActiveTransform.position && cam.rotation == currActiveTransform.rotation)
+            //UnityEngine.Debug.Log(cam.rotation.eulerAngles + ", " + currActiveTransform.rotation.eulerAngles);
+            //UnityEngine.Debug.Log((cam.position == currActiveTransform.position) + ", " + (cam.rotation == currActiveTransform.rotation));
+            if (cam.position == currActiveTransform.position && (cam.rotation == currActiveTransform.rotation || Vector3.Distance(cam.rotation.eulerAngles, currActiveTransform.rotation.eulerAngles) < 0.001f)) //OVO JE KRITICNO ZBOG RELATIVNE ROTACIJE
+                                                                                                                                                                                                                 //if (repoTime >= 1f)
             {
                 reposition = false;
                 camRotScript.enabled = true;
@@ -48,6 +51,7 @@ public class CameraSwitch : MonoBehaviour
 
     public void ChangeCamera()
     {
+        //Debug.Log("BEN");
         //UnityEngine.Debug.Log(transform.name + ", " + currActive);
         //string callingFuncName = new StackFrame(1).GetMethod().Name;
         //UnityEngine.Debug.Log(callingFuncName);
