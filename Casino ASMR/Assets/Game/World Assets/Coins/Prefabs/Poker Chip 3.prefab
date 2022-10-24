@@ -63,8 +63,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -3522955778539423533, guid: 242f9317bf45f8741933b928c2c26df0, type: 3}
-  - {fileID: 7922251121040759823, guid: 242f9317bf45f8741933b928c2c26df0, type: 3}
-  - {fileID: -2189049369018723441, guid: 242f9317bf45f8741933b928c2c26df0, type: 3}
+  - {fileID: 2100000, guid: 53bd36df453d5ef4bbb7765242197ea5, type: 2}
+  - {fileID: 2100000, guid: 53bd36df453d5ef4bbb7765242197ea5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2276213634418798672}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c6be25fedad9bd4faef7f82d90529f5, type: 3}
   m_Name: 
@@ -154,7 +154,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5917396722409809444}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.149}
+  m_LocalPosition: {x: 0, y: 0, z: -0.186}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6359071801835342445}
@@ -168,7 +168,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5917396722409809444}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -201,7 +201,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.3
@@ -210,7 +210,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.6918869
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -342,3 +342,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f78e98129db61c64e92658ef1e96a182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinRollScript: {fileID: 4053425836789857997}

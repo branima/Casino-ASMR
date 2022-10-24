@@ -14,4 +14,7 @@ public class CoinRoll : MonoBehaviour
 
     public void SetNormalSpeed() => currSpeed = speed;
     public void SetBoostedSpeed() => currSpeed = speed * 2f;
+    public void SetCustomSpeed(float custSpeed) => currSpeed = custSpeed;
+
+    public float GetCurrSpeed() => currSpeed;
 }

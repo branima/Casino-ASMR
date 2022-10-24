@@ -11,12 +11,14 @@ public class CoinSpacing : MonoBehaviour
     float coinGap;
     float speed;
 
+    public CoinRoll coinRollScript;
+
     // Update is called once per frame
     void Update()
     {
         if (!(activeCoins != null && coinGap != 0f))
             return;
-        
+
         foreach (PathFollower item in activeCoins)
         {
             float currPos = item.GetDistanceTraveled() % item.pathCreator.path.length;
@@ -29,9 +31,13 @@ public class CoinSpacing : MonoBehaviour
             pathFollowScript.speed = activeCoins[0].speed;
         else
             pathFollowScript.speed = speed;
-        activeCoins.Add(pathFollowScript);
-        activeCoins = null;
 
+        activeCoins.Add(pathFollowScript);
+
+        coinRollScript.enabled = true;
+        coinRollScript.SetCustomSpeed(activeCoins[0].GetComponentInChildren<CoinRoll>().GetCurrSpeed());
+
+        activeCoins = null;
         Destroy(this);
     }
 

@@ -118,7 +118,9 @@ public class GameManager : MonoBehaviour
         pathFollowScript.pathCreator = paths[0];
         activeCoins.Add(pathFollowScript);
         activeCoinsTrails.Add(coinInstance.GetComponentInChildren<TrailRenderer>());
-        activeCoinRollScripts.Add(coinInstance.GetComponentInChildren<CoinRoll>());
+        CoinRoll cr = coinInstance.GetComponentInChildren<CoinRoll>();
+        cr.enabled = true;
+        activeCoinRollScripts.Add(cr);
         currNumberOfCoins = 1;
 
         if (coinDictionary.ContainsKey(coinPrefabs[0].name))
@@ -246,8 +248,6 @@ public class GameManager : MonoBehaviour
             activeCoinsTrails.Add(tr);
 
             CoinRoll cr = coinInstance.GetComponentInChildren<CoinRoll>();
-            if (currCoinSpeed == defaultCoinSpeed * 2)
-                cr.SetBoostedSpeed();
             activeCoinRollScripts.Add(cr);
 
             CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
@@ -423,6 +423,8 @@ public class GameManager : MonoBehaviour
                         activeCoins.RemoveAt(idx);
                         activeCoinsTrails[idx].enabled = false;
                         activeCoinsTrails.RemoveAt(idx);
+                        activeCoinRollScripts[idx].enabled = false;
+                        activeCoinRollScripts.RemoveAt(idx);
                     }
 
                     removeCnt = 3;
@@ -506,10 +508,14 @@ public class GameManager : MonoBehaviour
         activeCoinsTrails.Add(tr);
 
         CoinRoll cr = coinInstance.GetComponentInChildren<CoinRoll>();
+        cr.enabled = true;
+        activeCoinRollScripts.Add(cr);
+        /*
+        CoinRoll cr = coinInstance.GetComponentInChildren<CoinRoll>();
         if (currCoinSpeed == defaultCoinSpeed * 2)
             cr.SetBoostedSpeed();
         activeCoinRollScripts.Add(cr);
-
+        */
         currNumberOfCoins -= 2;
 
         CoinSpacing coinSpacing = coinInstance.GetComponent<CoinSpacing>();
