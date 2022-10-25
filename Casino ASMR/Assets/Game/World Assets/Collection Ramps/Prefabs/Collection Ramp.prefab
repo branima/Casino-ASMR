@@ -486,13 +486,13 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 26a9209a8b2396f4e84dd0d6f73d8a99, type: 2}
-  - {fileID: 880774007180850119, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
+  - {fileID: 2100000, guid: 7b2f103f473860e448dc67582bc53ea3, type: 2}
   - {fileID: 6699446615349125189, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
   - {fileID: -3846018093981099296, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
-  - {fileID: -6629797300637803691, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
+  - {fileID: 2100000, guid: 7b2f103f473860e448dc67582bc53ea3, type: 2}
   - {fileID: 4874126678125670354, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
   - {fileID: -2813467912831258332, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
-  - {fileID: -6922793697723135513, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
+  - {fileID: 2100000, guid: 7b2f103f473860e448dc67582bc53ea3, type: 2}
   - {fileID: -8274133419916619345, guid: 82b75d5cbe83a9f45b2fd8e3b7e3ecf8, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -647,6 +647,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2588967735077841022, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ef0dd5214cdc02b408c534bab8037cf1, type: 2}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: lengthInSec
       value: 0.35
@@ -702,6 +706,10 @@ PrefabInstance:
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: InitialModule.maxNumParticles
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
