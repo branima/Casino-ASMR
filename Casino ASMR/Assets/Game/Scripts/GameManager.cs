@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        SaveSystem.SaveGame(new SaveData(SceneManager.GetActiveScene().buildIndex));
+
         money = 0;
         moneyText.text = "$0";
 

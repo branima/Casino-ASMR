@@ -684,6 +684,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
+      propertyPath: InitialModule.rotation3D
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: EmissionModule.m_BurstCount
       value: 0
       objectReference: {fileID: 0}
@@ -709,7 +713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.15
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -721,7 +725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 35
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2588967735077841023, guid: 8b4533196fc29c144b4b61012d11072c, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
