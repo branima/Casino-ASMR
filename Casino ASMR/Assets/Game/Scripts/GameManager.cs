@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public Material uiGrayscaleMat;
 
     public int addCoinPrice = 0;
-    public int addRoutePrice = 300;
+    public int addRoutePrice = 500;
     public int incomePrice = 0;
     public int mergePrice = 10;
     public int nextAreaPrice = 1000;

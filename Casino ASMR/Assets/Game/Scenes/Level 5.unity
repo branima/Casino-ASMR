@@ -7527,7 +7527,7 @@ MonoBehaviour:
   nextAreaButton: {fileID: 1751941871}
   uiGrayscaleMat: {fileID: 2100000, guid: 64c9dc19b70bb4147b667e7e74257960, type: 2}
   addCoinPrice: 0
-  addRoutePrice: 50
+  addRoutePrice: 200
   incomePrice: 0
   mergePrice: 10
   nextAreaPrice: 1000

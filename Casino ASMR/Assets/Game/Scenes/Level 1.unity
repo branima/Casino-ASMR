@@ -8472,7 +8472,7 @@ MonoBehaviour:
   nextAreaButton: {fileID: 1512124269}
   uiGrayscaleMat: {fileID: 2100000, guid: 64c9dc19b70bb4147b667e7e74257960, type: 2}
   addCoinPrice: 0
-  addRoutePrice: 50
+  addRoutePrice: 200
   incomePrice: 0
   mergePrice: 10
   nextAreaPrice: 5000
@@ -9738,7 +9738,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1663949688132081711, guid: d920f2fdf7422344291612ab8e829fc5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1663949688132081876, guid: d920f2fdf7422344291612ab8e829fc5, type: 3}
       propertyPath: m_RootOrder
