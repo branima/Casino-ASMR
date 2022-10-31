@@ -27,10 +27,10 @@ public class GameManager : MonoBehaviour
     public int mergePrice = 10;
     public int nextAreaPrice = 1000;
 
-    int addCoinModif = 5;
-    int addRouteModif = 150;
-    int incomeModif = 30;
-    int mergeModif = 30;
+    int addCoinModif = 3;
+    int addRouteModif = 20;
+    int incomeModif = 10;
+    int mergeModif = 10;
 
     public List<GameObject> collectionRamps;
     int activeCollectionRamps;
@@ -370,7 +370,7 @@ public class GameManager : MonoBehaviour
             ramp.transform.localScale = Vector3.zero;
             ramp.SetActive(true);
             ramp.GetComponent<ProceduralScale>().Scale(oldScale);
-            StartCoroutine(Deparent(ramp.transform, 2f));
+            //StartCoroutine(Deparent(ramp.transform, 2f));
 
             if (activeCollectionRamps == maxActiveCollectionRamps)
                 incomeButton.GetComponentInChildren<TextMeshProUGUI>().text = "MAX";
